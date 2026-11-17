@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { foodSurface } from './materials';
 import * as THREE from 'three';
 import {
   bunGeometry, pattyGeometry, lettuceGeometry, tomatoGeometry,
@@ -55,18 +56,20 @@ function Sesame() {
 
 function BaseBun() {
   const geometry = useMemo(() => bunGeometry(false), []);
+  const surface = useMemo(() => foodSurface('bread'), []);
   return (
     <mesh geometry={geometry} castShadow receiveShadow>
-      <meshStandardMaterial vertexColors roughness={.87} metalness={0} side={THREE.DoubleSide} />
+      <meshStandardMaterial vertexColors roughness={.87} metalness={0} side={THREE.DoubleSide} map={surface.albedo} normalMap={surface.normal} roughnessMap={surface.roughness} normalScale={new THREE.Vector2(.42, .42)} />
     </mesh>
   );
 }
 function TopBun() {
   const geometry = useMemo(() => bunGeometry(true), []);
+  const surface = useMemo(() => foodSurface('bread'), []);
   return (
     <group>
       <mesh geometry={geometry} castShadow receiveShadow>
-        <meshStandardMaterial vertexColors roughness={.67} metalness={.015} side={THREE.DoubleSide} />
+        <meshStandardMaterial vertexColors roughness={.67} metalness={.015} side={THREE.DoubleSide} map={surface.albedo} normalMap={surface.normal} roughnessMap={surface.roughness} normalScale={new THREE.Vector2(.42, .42)} />
       </mesh>
       <Sesame />
     </group>
@@ -74,6 +77,7 @@ function TopBun() {
 }
 function Patty() {
   const geometry = useMemo(() => pattyGeometry(), []);
+  const surface = useMemo(() => foodSurface('beef'), []);
   const flecks = useMemo(() => Array.from({ length: 80 }, (_, i) => {
     const theta = i * 2.39996;
     const r = Math.sqrt((i + .5) / 80) * .95;
@@ -82,7 +86,7 @@ function Patty() {
   return (
     <group>
       <mesh geometry={geometry} castShadow receiveShadow>
-        <meshStandardMaterial vertexColors roughness={.83} metalness={.025} side={THREE.DoubleSide} />
+        <meshStandardMaterial vertexColors roughness={.83} metalness={.025} side={THREE.DoubleSide} map={surface.albedo} normalMap={surface.normal} roughnessMap={surface.roughness} normalScale={new THREE.Vector2(.7, .7)} />
       </mesh>
       <group>
         {flecks.map((f, i) => (
